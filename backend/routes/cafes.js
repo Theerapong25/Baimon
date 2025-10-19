@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { listCafes, createCafe, updateCafe, deleteCafe } from '../controllers/cafeController.js';
+import { authRequired} from '../middlewares/authRequired.js';
+import { adminOnly } from '../middlewares/adminOnly.js';
+const r = Router();
+r.get('/', listCafes);
+r.post('/', authRequired, adminOnly, createCafe);
+r.put('/:id', authRequired, adminOnly, updateCafe);
+r.delete('/:id', authRequired, adminOnly, deleteCafe);
+export default r;

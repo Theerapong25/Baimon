@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>คาเฟ่ใกล้ KU KPS</title>
+
+  <!-- ✅ ฟอนต์ Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand: #d99f2b;
+      --brand-600: #c88f1d;
+      --ink: #2c2c2c;
+      --muted: #7a7a7a;
+      --bg: #faf8f6;
+      --card: #fff;
+      --line: #eee7df;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      width: min(1200px, 92vw);
+      margin-inline: auto;
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, #fff, rgba(255, 255, 255, .6));
+      
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo svg {
+      width: 36px;
+      height: 36px;
+      fill: currentColor;
+      color: #a0742a;
+    }
+
+    .logo h1 {
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: .2px;
+      font-weight: 600;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 6px;
+      border-radius: 999px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: min(42vw, 420px);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 6px 14px rgba(217, 159, 43, .18);
+      transition: transform .08s ease, background .15s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: var(--brand-600);
+    }
+
+    .btn.ghost {
+      background: #fff;
+      color: var(--brand-600);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .auth-box a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .auth-box .btn {
+      padding: 10px 16px;
+    }
+
+    /* Grid */
+    .cafe-grid {
+      padding: 24px 0 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width:1024px) {
+      .cafe-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width:640px) {
+      .cafe-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card */
+    .cafe-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .06);
+      display: flex;
+      flex-direction: column;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .cafe-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 42px rgba(0, 0, 0, .08);
+    }
+
+    .cafe-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: #f1ece5;
+    }
+
+    .cafe-card h2 {
+      font-size: 18px;
+      line-height: 1.4;
+      margin: 12px 16px 4px;
+      font-weight: 600;
+    }
+
+    .cafe-card a {
+      align-self: flex-start;
+      margin: 12px 16px 18px;
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 6px 14px rgba(217, 159, 43, .18);
+      transition: transform .08s ease, background .15s ease;
+    }
+
+    .cafe-card a:hover {
+      transform: translateY(-1px);
+      background: var(--brand-600);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 16px 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+          <path
+            d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h560v80h-80v80q0 17-11.5 28.5T680-680H360q-17 0-28.5-11.5T320-720v-80h-80v640h162q-38-27-60-68.5T320-320v-200h400v200q0 50-22 91.5T638-160h162v80H240Zm280-120q50 0 85-35t35-85v-120H400v120q0 50 35 85t85 35Zm0-360q17 0 28.5-11.5T560-600q0-17-11.5-28.5T520-640q-17 0-28.5 11.5T480-600q0 17 11.5 28.5T520-560Zm0 120Z" />
+        </svg>
+        <h1>คาเฟ่ใกล้ KU KPS</h1>
+      </div>
+
+      <form class="search-box" onsubmit="event.preventDefault(); searchCafe();">
+        <input type="text" placeholder="ค้นหาคาเฟ่..." id="searchInput" />
+        <button type="button" class="btn" id="searchBtn">ค้นหา</button>
+      </form>
+
+      <div class="auth-box">
+        <a class="btn ghost" href="login.html">เข้าสู่ระบบ</a>
+      </div>
+    </header>
+
+    <!-- Cafe Grid -->
+    <div class="cafe-grid" id="cafeGrid">
+      <div class="cafe-card">
+        <img src="../assets/images/D1.jpg" alt="Dilly Lazy" class="cafe-image" />
+        <h2>Dilly Lazy: Cafe & Restaurant</h2>
+        <a href="Dilly lazy.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../IGEAR Cafe.jpg" alt="IGEAR Cafe" class="cafe-image" />
+        <h2>IGEAR Cafe' & Innovation</h2>
+        <a href="../IGEAR.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../Nine COFFEE.jpg" alt="NINE COFFEE" class="cafe-image" />
+        <h2>NINE COFFEE</h2>
+        <a href="../NINE COFFEE.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../Enjoy manicure & Enjoy Cat Cafe.webp" alt="Enjoy Cat Cafe" class="cafe-image" />
+        <h2>Enjoy Manicure & Enjoy Cat Cafe</h2>
+        <a href="../Enjoymanicaure.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../Charista Home.jpg" alt="Charista Home" class="cafe-image" />
+        <h2>Charista Home</h2>
+        <a href="../Charista Home.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../dessert1.jpg" alt="Dessert" class="cafe-image" />
+        <h2>Dessert</h2>
+        <a href="../Dessert cafe.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../Lifestyle coffee home.jpg" alt="Lifestyle Coffee" class="cafe-image" />
+        <h2>Lifestyle Coffee</h2>
+        <a href="../Lifestyle Coffee.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../เกษตรอภิรมย์1.webp" alt="เกษตรอภิรมย์" class="cafe-image" />
+        <h2>เกษตรอภิรมย์</h2>
+        <a href="../เกษตรอภิรมย์.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../Punthai.jpg" alt="PUNTHAI COFFEE" class="cafe-image" />
+        <h2>PUNTHAI COFFEE</h2>
+        <a href="../PUNTHAI.html">ดูเพิ่มเติม</a>
+      </div>
+
+      <div class="cafe-card">
+        <img src="../Hola4.jpg" alt="HOLA Icecream" class="cafe-image" />
+        <h2>HOLA - Homemade Icecream</h2>
+        <a href="../HOLA - Homemade Icecream.html">ดูเพิ่มเติม</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = document.querySelectorAll(".cafe-card");
+    function searchCafe() {
+      const keyword = (searchInput.value || "").toLowerCase().trim();
+      cards.forEach(card => {
+        const name = card.querySelector("h2").textContent.toLowerCase();
+        card.style.display = name.includes(keyword) ? "" : "none";
+      });
+    }
+    document.getElementById("searchBtn").addEventListener("click", searchCafe);
+    searchInput.addEventListener("input", searchCafe);
+    searchInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); searchCafe(); }
+    });
+  </script>
+</body>
+
+</html>

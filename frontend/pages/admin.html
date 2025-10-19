@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard - Cafe Management</title>
+
+  <!-- Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --pink: #f28ab2;
+      --pink-600: #e0548a;
+      --pink-50: #fde6ef;
+      --ink: #2c2c2c;
+      --muted: #737373;
+      --card: #fff;
+      --line: #f4dbe6;
+      --radius: 16px;
+      --sbw: 260px;
+      /* sidebar width (grid col 1) */
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Noto Sans Thai', system-ui, Segoe UI, Arial, sans-serif;
+      background: var(--pink-50);
+      color: var(--ink);
+    }
+
+    /* ====== APP GRID ====== */
+    .app {
+      display: grid;
+      grid-template-columns: var(--sbw) 1fr;
+      grid-template-rows: 1fr;
+      min-height: 100vh;
+      transition: grid-template-columns .25s ease;
+    }
+
+    .app.collapsed {
+      --sbw: 84px;
+    }
+
+    /* ====== SIDEBAR ====== */
+    .sidebar {
+      background: var(--pink);
+      color: #fff;
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-right: 1px solid rgba(255, 255, 255, .25);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, .35);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .brand .bubble {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #fff2f7;
+      color: var(--pink-600);
+      font-size: 18px;
+    }
+
+    .menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .menu li {
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .menu li:hover {
+      background: rgba(255, 255, 255, .13);
+    }
+
+    .menu li.active {
+      background: rgba(255, 255, 255, .25);
+    }
+
+    .menu .label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ซ่อน label เมื่อพับ */
+    .app.collapsed .menu .label {
+      display: none;
+    }
+
+    .app.collapsed .brand .text {
+      display: none;
+    }
+
+    /* ====== MAIN ====== */
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      /* กัน overflow */
+    }
+
+    /* topbar ติดบน */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: linear-gradient(180deg, #fff, rgba(255, 255, 255, .8));
+      
+      border-bottom: 1px solid var(--line);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toggle {
+      border: none;
+      border-radius: 10px;
+      background: var(--pink);
+      color: #fff;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 6px 14px rgba(242, 138, 178, .22);
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e1e1e;
+    }
+
+    .title .emoji {
+      font-size: 22px
+    }
+
+    .content {
+      padding: 22px;
+      display: block;
+      min-width: 0;
+    }
+
+    /* ====== PAGES ====== */
+    .page {
+      display: none;
+      animation: fade .18s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ====== CARDS ====== */
+    .stats {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+    }
+
+    @media (max-width:1024px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width:640px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .05);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-weight: 600;
+      color: #6b6b6b;
+    }
+
+    .card .big {
+      font-size: 34px;
+      color: var(--pink-600);
+      font-weight: 800;
+    }
+
+    /* ====== TABLE ====== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    th {
+      background: #fff;
+    }
+
+    tr:hover td {
+      background: #fff7fb;
+    }
+
+    .btn {
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(242, 138, 178, .22);
+    }
+
+    .btn:hover {
+      background: var(--pink-600);
+    }
+
+    .actions button {
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-right: 6px;
+      cursor: pointer;
+    }
+
+    .actions button:hover {
+      background: var(--pink-600);
+    }
+
+    /* ====== MODAL ====== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 10;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .sheet {
+      width: min(520px, 92vw);
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px 18px 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .2);
+    }
+
+    .sheet h3 {
+      margin: 0 0 10px;
+    }
+
+    .field {
+      margin: 10px 0;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+    }
+
+    .preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .preview img {
+      width: 86px;
+      height: 86px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #e9e9e9;
+    }
+
+    /* motion safe */
+    @media (prefers-reduced-motion:reduce) {
+      .app {
+        transition: none
+      }
+
+      .page {
+        animation: none
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app" id="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="bubble">☕</div>
+        <div class="text">Admin</div>
+      </div>
+      <ul class="menu" id="menu">
+        <li class="active" data-page="dashboard"><span>📊</span><span class="label">Dashboard</span></li>
+        <li data-page="cafes"><span>🏪</span><span class="label">จัดการคาเฟ่</span></li>
+        <li data-page="menus"><span>🍽️</span><span class="label">จัดการเมนู</span></li>
+        <li data-page="reviews"><span>💬</span><span class="label">จัดการรีวิว</span></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <section class="main">
+      <div class="topbar">
+        <button class="toggle" id="toggle">☰</button>
+        <div class="title"><span class="emoji">📊</span><span id="pageTitle">Dashboard</span></div>
+      </div>
+
+      <div class="content">
+
+        <!-- PAGE: Dashboard -->
+        <div class="page active" id="dashboard">
+          <div class="stats">
+            <div class="card">
+              <h3>จำนวนคาเฟ่ทั้งหมด</h3>
+              <div class="big">10</div>
+            </div>
+            <div class="card">
+              <h3>เมนูทั้งหมด</h3>
+              <div class="big">45</div>
+            </div>
+            <div class="card">
+              <h3>รีวิวทั้งหมด</h3>
+              <div class="big">98</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Cafes -->
+        <div class="page" id="cafes">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h2 style="margin:0">🏪 จัดการคาเฟ่</h2>
+            <button class="btn" id="addCafe">+ เพิ่มคาเฟ่</button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ชื่อคาเฟ่</th>
+                <th>ตำแหน่ง</th>
+                <th>เวลาเปิดปิด</th>
+                <th>วันหยุด</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="cafeTable">
+              <tr>
+                <td>Charista Home</td>
+                <td><a href="#" target="_blank">ดูแผนที่</a></td>
+                <td>08:00–18:00</td>
+                <td>จันทร์</td>
+                <td class="actions"><button>แก้ไข</button><button>ลบ</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE: Menus -->
+        <div class="page" id="menus">
+          <h2 style="margin-top:0">🍽️ จัดการเมนู</h2>
+          <div class="field" style="max-width:320px">
+            <label>ประเภทเมนู</label>
+            <select id="menuType">
+              <option>อาหาร</option>
+              <option>เครื่องดื่ม</option>
+              <option>ของหวาน</option>
+            </select>
+          </div>
+          <button class="btn" id="addMenu">+ เพิ่มเมนู</button>
+          <table>
+            <thead>
+              <tr>
+                <th>ชื่อเมนู</th>
+                <th>ประเภท</th>
+                <th>ราคา</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="menuTable">
+              <tr>
+                <td>ลาเต้เย็น</td>
+                <td>เครื่องดื่ม</td>
+                <td>65</td>
+                <td class="actions"><button>แก้ไข</button><button>ลบ</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE: Reviews -->
+        <div class="page" id="reviews">
+          <h2 style="margin-top:0">💬 จัดการรีวิว</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ผู้ใช้</th>
+                <th>รีวิว</th>
+                <th>คะแนน</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Praew</td>
+                <td>ร้านน่ารัก บริการดี</td>
+                <td>5⭐</td>
+                <td class="actions"><button>ตอบกลับ</button><button>ลบ</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- MODAL: Add Cafe -->
+  <div class="modal" id="cafeModal">
+    <div class="sheet">
+      <h3>เพิ่มคาเฟ่ใหม่</h3>
+      <div class="field"><label>ชื่อคาเฟ่</label><input id="cafeName" /></div>
+      <div class="field"><label>ลิงก์ Google Maps</label><input id="cafeMap" placeholder="https://goo.gl/maps/..." />
+      </div>
+      <div class="field"><label>เวลาเปิด–ปิด</label><input id="cafeTime" placeholder="08:00–18:00" /></div>
+      <div class="field"><label>วันหยุด</label><input id="cafeClose" placeholder="เช่น จันทร์" /></div>
+      <div class="field">
+        <label>รูปภาพ (หลายรูป)</label>
+        <input type="file" id="cafeImages" multiple accept="image/*" />
+        <div class="preview" id="preview"></div>
+      </div>
+      <div class="field">
+        <label>ไฟล์โมเดล 3D (.glb/.gltf)</label>
+        <input type="file" id="cafeModel" accept=".glb,.gltf" />
+        <small style="color:var(--muted)">สามารถแสดงในหน้าโมเดล 3D ภายหลัง</small>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn" id="saveCafe">บันทึก</button>
+        <button class="btn" style="background:#e6e6e6;color:#222" id="closeCafe">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+     const menuItems = document.querySelectorAll("#menu li");
+  const pages = document.querySelectorAll(".page");
+  const pageTitle = document.getElementById("pageTitle");
+
+  menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+      // 1️⃣ เปลี่ยน active ของ menu
+      menuItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+
+      // 2️⃣ แสดง page ตาม data-page
+      const target = item.getAttribute("data-page");
+      pages.forEach(p => p.classList.remove("active"));
+      document.getElementById(target).classList.add("active");
+
+      // 3️⃣ เปลี่ยนชื่อ topbar
+      const label = item.querySelector(".label").textContent;
+      pageTitle.textContent = label;
+    });
+  });
+
+  // ===== toggle sidebar =====
+  const app = document.getElementById("app");
+  const toggle = document.getElementById("toggle");
+  toggle.addEventListener("click", () => {
+    app.classList.toggle("collapsed");
+  });
+    
+    // ดึงข้อมูลผู้ใช้จาก backend เพื่อเช็คสิทธิ์
+    (async () => {
+      try {
+        const res = await fetch("http://localhost:5001/auth/me", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "unauthorized");
+
+        // ถ้าไม่ใช่ admin ห้ามเข้า
+        if (data.role !== "admin") {
+          alert("คุณไม่มีสิทธิ์เข้าหน้านี้");
+          localStorage.removeItem("token");
+          window.location.href = "login.html";
+        }
+
+        console.log("✅ ยินดีต้อนรับ ADMIN:", data.name);
+      } catch (err) {
+        console.error(err);
+        localStorage.removeItem("token");
+       // window.location.href = "admin.html";
+      }
+    })();
+
+  </script>
+</body>
+
+</html>

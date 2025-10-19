@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ</title>
+  <style>
+    /* --- เหมือนของเดิมได้เลย ไม่ต้องแก้ CSS --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 { font-size: 28px; margin-bottom: 20px; color: #6C4A3C; text-align: center; }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { font-size: 14px; color: #666; display: block; margin-bottom: 5px; }
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+    }
+    .input-group input:focus { border-color: #B95E82; }
+    .login-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #F9AFAE;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .login-button:hover { background-color: #F7C5C3; }
+    .register-link { display: block; margin-top: 15px; text-align: center; }
+    .register-link a { color: #6C4A3C; text-decoration: none; }
+    .register-link a:hover { text-decoration: underline; }
+    .msg { text-align: center; margin-top: 15px; color: #b33; }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h1>เข้าสู่ระบบ</h1>
+
+    <!-- ❌ เดิม: action="login-process.php" -->
+    <!-- ✅ แก้ให้ใช้ JavaScript fetch ไปที่ Node.js -->
+    <form id="loginForm">
+      <div class="input-group">
+        <label for="email">อีเมล</label>
+        <input type="email" id="email" name="email" required placeholder="กรอกอีเมล">
+      </div>
+      <div class="input-group">
+        <label for="password">รหัสผ่าน</label>
+        <input type="password" id="password" name="password" required placeholder="กรอกรหัสผ่าน">
+      </div>
+      <button type="submit" class="login-button">เข้าสู่ระบบ</button>
+      <div class="msg" id="msg"></div>
+    </form>
+
+    <div class="register-link">
+      <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
+    </div>
+  </div>
+
+  <script>
+    const API = "http://localhost:5001/auth/login";
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const msg = document.getElementById("msg");
+
+      try {
+        const res = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || "เข้าสู่ระบบไม่สำเร็จ");
+        localStorage.setItem("token", data.token);
+        msg.style.color = "#2f8f4a";
+        msg.textContent = "✅ เข้าสู่ระบบสำเร็จ ";
+
+        window.location.href = "admin.html"
+      } catch (err) {
+        msg.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>

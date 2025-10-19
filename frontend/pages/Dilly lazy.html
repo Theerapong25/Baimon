@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dilly Lazy: Cafe & Restaurant</title>
+
+  <!-- ฟอนต์ Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f4f4f9;
+      --card: #fff;
+      --muted: #666;
+      --ink: #333;
+      --brand: #B95E82;
+      --brand-100: #f9c1e0;
+      --brand-200: #e88bc1;
+      --ring: #eaeaea;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans Thai', system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .cafe-detail {
+      width: min(1100px, 85%);
+      margin: 40px auto;
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+      padding: 24px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid var(--ring);
+      padding-bottom: 12px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: #f44336;
+      color: #fff;
+      border: 0;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+
+    .close-btn:hover {
+      filter: brightness(.95);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .tab {
+      padding: 10px 16px;
+      font-size: 15px;
+      background: #f1f1f1;
+      border: 2px solid #ddd;
+      border-radius: 999px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .18s;
+    }
+
+    .tab.active {
+      background: var(--brand-100);
+      color: #851212;
+      border-color: var(--brand);
+    }
+
+    .tab:hover {
+      background: #ececec;
+    }
+
+    /* Layout */
+    .content {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .map {
+      flex: 2;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .map iframe {
+      width: 100%;
+      height: 420px;
+      border: 0;
+    }
+
+    .info {
+      flex: 1;
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .06);
+    }
+
+    /* Gallery */
+    .gallery-container {
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform .5s ease;
+    }
+
+    .slides img {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, .55);
+      color: #fff;
+      border: none;
+      font-size: 22px;
+      line-height: 1;
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .prev {
+      left: 10px
+    }
+
+    .next {
+      right: 10px
+    }
+
+    /* Menu */
+    select.menu-select {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1.5px solid #ddd;
+      background: #fff;
+      margin-bottom: 16px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .menu-dark {
+      background: #F2EAD3;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid #ddd;
+    }
+
+    .menu-dark h3 {
+      margin: 4px 8px 8px;
+      font-size: 16px;
+      color: #475569;
+    }
+
+    .drink-list {
+      list-style: none;
+      margin: 0;
+      padding: 8px;
+    }
+
+    .drink-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--brand);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin: 10px 0;
+      box-shadow: 0 2px 0 rgb(188, 23, 23), inset 0 0 0 1px rgba(255, 255, 255, .08);
+      transition: .15s;
+      cursor: pointer;
+    }
+
+    .drink-item:hover {
+      transform: translateY(-1px);
+      background: var(--brand-200);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .18);
+    }
+
+    .drink-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 14px;
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, .35);
+      background: rgba(15, 23, 42, .55);
+      min-width: 58px;
+      text-align: center;
+    }
+
+    .tabpanel {
+      display: none;
+    }
+
+    .tabpanel.active {
+      display: block;
+    }
+
+    @media(max-width:960px) {
+      .content {
+        flex-direction: column
+      }
+
+      .info {
+        order: 2
+      }
+
+      .map {
+        order: 1
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cafe-detail">
+    <div class="header">
+      <h2>Dilly Lazy: Cafe & Restaurant</h2>
+      <button class="close-btn" id="closeBtn">ปิด</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-target="jpg-tab">รูปภาพ</button>
+      <button class="tab" data-target="map-tab">แผนที่</button>
+      <button class="tab" data-target="menu-tab">เมนู</button>
+      <button class="tab" data-target="3d-tab">โมเดล 3D</button>
+      <button class="tab" data-target="review-tab">รีวิว</button>
+    </div>
+
+    <div class="content">
+      <!-- รูปภาพ -->
+      <section id="jpg-tab" class="info tabpanel active">
+        <div class="gallery-container">
+          <div class="slides" id="slides">
+            <img src="../D1.jpg">
+            <img src="../D2.jpg">
+            <img src="../D3.jpg">
+            <img src="../D4.jpg">
+          </div>
+          <button class="gallery-btn prev" id="prevBtn">❮</button>
+          <button class="gallery-btn next" id="nextBtn">❯</button>
+        </div>
+      </section>
+
+      <!-- แผนที่ -->
+      <section id="map-tab" class="map tabpanel">
+        <iframe src="https://www.google.com/maps?q=Dilly%20Lazy%20Cafe%20Kamphaeng%20Saen&output=embed"
+          loading="lazy"></iframe>
+      </section>
+
+      <!-- เมนู -->
+      <section id="menu-tab" class="info tabpanel">
+        <select id="menuSelect" class="menu-select">
+          <option value="drinks">🍹 เครื่องดื่ม</option>
+          <option value="food">🍽️ อาหาร</option>
+          <option value="dessert">🍰 ของหวาน</option>
+        </select>
+
+        <!-- Drinks -->
+        <div class="menu-dark menu-group" data-cat="drinks">
+          <h3>เมนูเครื่องดื่ม</h3>
+          <ul class="drink-list">
+            <li class="drink-item"><span class="food-name">อเมริกาโน่</span><span class="price">฿55</span></li>
+            <li class="drink-item"><span class="food-name">ลาเต้เย็น</span><span class="price">฿65</span></li>
+            <li class="drink-item"><span class="food-name">ชาเขียวเย็น</span><span class="price">฿60</span></li>
+          </ul>
+        </div>
+
+        <!-- Food -->
+        <div class="menu-dark menu-group" data-cat="food" style="display:none;">
+          <h3>เมนูอาหาร</h3>
+          <ul class="drink-list">
+            <li class="drink-item"><span class="drink-name">ข้าวกะเพรา</span><span class="price">฿79</span></li>
+            <li class="drink-item"><span class="drink-name">สปาเก็ตตี้ผัดพริกแห้ง</span><span class="price">฿95</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Dessert -->
+        <div class="menu-dark menu-group" data-cat="dessert" style="display:none;">
+          <h3>เมนูของหวาน</h3>
+          <ul class="drink-list">
+            <li class="drink-item"><span class="drink-name">เครปเค้กสตรอว์เบอร์รี่</span><span class="price">฿85</span>
+            </li>
+            <li class="drink-item"><span class="drink-name">บราวนี่</span><span class="price">฿59</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3D -->
+      <section id="3d-tab" class="info tabpanel">
+        <p>โมเดล 3D จะมาเร็ว ๆ นี้!</p>
+      </section>
+
+      <!-- รีวิว -->
+      <section id="review-tab" class="info tabpanel">
+        <p>ระบบรีวิวจะเปิดใช้งานเร็ว ๆ นี้ 🌟</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    /* Tabs */
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tabpanel').forEach(p => p.classList.toggle('active', p.id === btn.dataset.target));
+      });
+    });
+
+    /* Gallery */
+    let i = 0; const s = document.getElementById('slides'); const total = s.children.length;
+    const go = n => { i = (n + total) % total; s.style.transform = `translateX(${-i * 100}%)`; }
+    document.getElementById('prevBtn').onclick = () => go(i - 1);
+    document.getElementById('nextBtn').onclick = () => go(i + 1);
+    go(0);
+
+    /* Menu select */
+    const select = document.getElementById('menuSelect');
+    select.addEventListener('change', () => {
+      document.querySelectorAll('.menu-group').forEach(g => {
+        g.style.display = g.dataset.cat === select.value ? 'block' : 'none';
+      });
+    });
+
+    document.getElementById('closeBtn').onclick = () => window.location.href = "Home.html";
+  </script>
+</body>
+
+</html>

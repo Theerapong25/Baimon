@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IGEAR cafe'Innovation</title>
+  <style>
+    :root {
+      --bg: #f4f4f9;
+      --card: #fff;
+      --muted: #666;
+      --ink: #333;
+      --brand: #B95E82;
+      --brand-100: #f9c1e0;
+      --brand-200: #e88bc1;
+      --ring: #eaeaea;
+      --ok: #14b8a6;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --gray: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      color: var(--ink)
+    }
+
+    .cafe-detail {
+      width: min(1100px, 85%);
+      margin: 40px auto;
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+      padding: 24px 24px 28px
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid var(--ring);
+      padding-bottom: 12px
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: .2px
+    }
+
+    .close-btn {
+      background: #f44336;
+      color: #fff;
+      border: 0;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: filter .15s ease
+    }
+
+    .close-btn:hover {
+      filter: brightness(.95)
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px
+    }
+
+    .tab {
+      padding: 10px 16px;
+      font-size: 15px;
+      background: #f1f1f1;
+      border: 2px solid #ddd;
+      border-radius: 999px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .18s
+    }
+
+    .tab.active {
+      background: var(--brand-100);
+      color: #851212;
+      border-color: var(--brand)
+    }
+
+    .tab:hover {
+      background: #ececec
+    }
+
+    /* Content layout */
+    .content {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px
+    }
+
+    .map {
+      flex: 2;
+      border-radius: 14px;
+      overflow: hidden
+    }
+
+    .map iframe {
+      width: 100%;
+      height: 420px;
+      border: 0
+    }
+
+    .info {
+      flex: 1;
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .06)
+    }
+
+    /* ===== Gallery ===== */
+    .gallery-container {
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+      aspect-ratio: 16/9;
+      background: #000
+    }
+
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform .5s ease
+    }
+
+    .slides img {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: auto;
+      user-select: none;
+      pointer-events: none
+    }
+
+    .gallery-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, .55);
+      color: #fff;
+      border: none;
+      font-size: 22px;
+      line-height: 1;
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor: pointer
+    }
+
+    .gallery-btn:focus {
+      outline: 3px solid rgba(255, 255, 255, .6)
+    }
+
+    .prev {
+      left: 10px
+    }
+
+    .next {
+      right: 10px
+    }
+
+    /* ===== Menu list ===== */
+    .menu-dark {
+      background: #F2EAD3;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid #ddd
+    }
+
+    .menu-dark h3 {
+      margin: 4px 8px 8px;
+      font-size: 16px;
+      color: #475569
+    }
+
+    .drink-list {
+      list-style: none;
+      margin: 0;
+      padding: 8px
+    }
+
+    .drink-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--brand);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin: 10px 0;
+      box-shadow: 0 2px 0 rgb(188, 23, 23), inset 0 0 0 1px rgba(255, 255, 255, .08);
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+      cursor: pointer
+    }
+
+    .drink-item:hover {
+      transform: translateY(-1px);
+      background: var(--brand-200);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .18), inset 0 0 0 1px rgba(255, 255, 255, .16)
+    }
+
+    .drink-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #f8fafc;
+      letter-spacing: .1px
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 14px;
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, .35);
+      background: rgba(15, 23, 42, .55);
+      min-width: 58px;
+      text-align: center
+    }
+
+    /* Hidden by default */
+    .tabpanel {
+      display: none
+    }
+
+    .tabpanel.active {
+      display: block
+    }
+
+    /* ===== Reviews ===== */
+    .reviews-wrap {
+      display: flex;
+      gap: 20px;
+      margin-top: 6px
+    }
+
+    .rating-summary {
+      flex: 1.1;
+      background: #fff;
+      border: 1px solid var(--ring);
+      border-radius: 14px;
+      padding: 16px
+    }
+
+    .rating-head {
+      display: flex;
+      gap: 16px;
+      align-items: center
+    }
+
+    .rating-big {
+      font-size: 48px;
+      font-weight: 800
+    }
+
+    .star-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0
+    }
+
+    .bar {
+      flex: 1;
+      height: 8px;
+      background: var(--gray);
+      border-radius: 999px;
+      overflow: hidden
+    }
+
+    .bar>span {
+      display: block;
+      height: 100%;
+      background: #fbbf24
+    }
+
+    .chips {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px
+    }
+
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .chip i {
+      font-style: normal
+    }
+
+    .chip .pct {
+      font-weight: 700
+    }
+
+    .reviews {
+      flex: 2;
+      background: #fff;
+      border: 1px solid var(--ring);
+      border-radius: 14px;
+      padding: 12px
+    }
+
+    .rv-card {
+      border-bottom: 1px solid var(--ring);
+      padding: 14px 6px
+    }
+
+    .rv-head {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .badge {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 6px
+    }
+
+    .meta {
+      color: #64748b;
+      font-size: 12px;
+      margin-top: 2px
+    }
+
+    .rv-body {
+      margin: 8px 0 10px;
+      line-height: 1.6
+    }
+
+    .rv-actions {
+      display: flex;
+      gap: 14px;
+      font-size: 13px;
+      color: #475569
+    }
+
+    .rv-actions button {
+      background: transparent;
+      border: 0;
+      cursor: pointer
+    }
+
+    .thumbs {
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 10px 0
+    }
+
+    .mini-grid img {
+      width: 100%;
+      height: 74px;
+      object-fit: cover;
+      border-radius: 8px
+    }
+
+    .give-rating {
+      margin-top: 14px;
+      border-top: 1px dashed var(--ring);
+      padding-top: 14px
+    }
+
+    .star-input {
+      display: flex;
+      gap: 6px;
+      font-size: 26px;
+      cursor: pointer
+    }
+
+    .star-input button {
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      line-height: 1
+    }
+
+    .star-input .on {
+      color: #f59e0b
+    }
+
+    .star-input .off {
+      color: #cbd5e1
+    }
+
+    .review-form textarea {
+      width: 100%;
+      min-height: 90px;
+      border: 1px solid var(--ring);
+      border-radius: 10px;
+      padding: 10px;
+      resize: vertical
+    }
+
+    .review-form .row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      border: 0;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer
+    }
+
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827
+    }
+
+    /* ===== Login modal ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px
+    }
+
+    .modal.open {
+      display: flex
+    }
+
+    .sheet {
+      background: #fff;
+      width: min(480px, 92vw);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+      position: relative
+    }
+
+    .sheet h3 {
+      margin: 0 0 10px;
+      text-align: center
+    }
+
+    .sheet .x {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      border: 0;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer
+    }
+
+    .input {
+      width: 100%;
+      border: 1px solid var(--ring);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px
+    }
+
+    .or {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0;
+      color: #64748b
+    }
+
+    .or:before,
+    .or:after {
+      content: "";
+      height: 1px;
+      background: var(--ring);
+      flex: 1
+    }
+
+    .oauth {
+      display: grid;
+      gap: 10px
+    }
+
+    .oauth button {
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--ring);
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: left;
+      cursor: pointer
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px
+    }
+
+    @media (max-width:960px) {
+      .content {
+        flex-direction: column
+      }
+
+      .info {
+        order: 2
+      }
+
+      .map {
+        order: 1
+      }
+
+      .reviews-wrap {
+        flex-direction: column
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cafe-detail" id="dialog">
+    <div class="header">
+      <h2>NINE COFFEE</h2>
+      <button class="close-btn" id="closeBtn" aria-label="ปิดหน้าต่าง">ปิด</button>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Cafe sections">
+      <button class="tab active" role="tab" aria-selected="true" data-target="jpg-tab">รูปภาพ</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="map-tab">แผนที่</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="menu-tab">เมนู</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="3d-tab">โมเดล 3D</button>
+      <button class="tab" role="tab" aria-selected="false" data-target="review-tab">รีวิว</button>
+    </div>
+
+    <div class="content">
+      <!-- รูปภาพ -->
+      <section id="jpg-tab" class="info tabpanel active" role="tabpanel" aria-label="รูปภาพ">
+        <div class="gallery-container" id="gallery" tabindex="0" aria-roledescription="carousel"
+          aria-label="แกลเลอรีรูปภาพ">
+          <div class="slides" id="slides">
+            <img src="NINE COFFEE1.jpg" srcset="Dilly Lazy_1200.jpg 1x, Dilly Lazy_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="บรรยากาศร้าน Dilly Lazy มุมกาแฟ">
+            <img src="NINE COFFEE2.jpg" srcset="Dilly Lazy2_1200.jpg 1x, Dilly Lazy2_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="โซนที่นั่งภายในร้าน">
+            <img src="NINE COFFEE3.jpg" srcset="Dilly Lazy3_1200.jpg 1x, Dilly Lazy3_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="มุมเสิร์ฟอาหารและเครื่องดื่ม">
+              <img src="NINE COFFEE4.jpg" srcset="Dilly Lazy3_1200.jpg 1x, Dilly Lazy3_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="มุมเสิร์ฟอาหารและเครื่องดื่ม">
+              <img src="NINE COFFEE5.jpg" srcset="Dilly Lazy3_1200.jpg 1x, Dilly Lazy3_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="มุมเสิร์ฟอาหารและเครื่องดื่ม">
+              <img src="NINE COFFEE6.jpg" srcset="Dilly Lazy3_1200.jpg 1x, Dilly Lazy3_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="มุมเสิร์ฟอาหารและเครื่องดื่ม">
+              <img src="NINE COFFEE7.jpg" srcset="Dilly Lazy3_1200.jpg 1x, Dilly Lazy3_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="มุมเสิร์ฟอาหารและเครื่องดื่ม">
+              <img src="NINE COFFEE8.jpg" srcset="Dilly Lazy3_1200.jpg 1x, Dilly Lazy3_2400.jpg 2x"
+              sizes="(max-width: 960px) 100vw, 600px" alt="มุมเสิร์ฟอาหารและเครื่องดื่ม">
+          </div>
+          <button class="gallery-btn prev" id="prevBtn" aria-label="รูปก่อนหน้า">❮</button>
+          <button class="gallery-btn next" id="nextBtn" aria-label="รูปถัดไป">❯</button>
+        </div>
+      </section>
+
+      <!-- แผนที่ -->
+      <section id="map-tab" class="map tabpanel" role="tabpanel" aria-label="แผนที่">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.7076440563783!2d100.52936231525226!3d13.73671750118957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29edc4e0d8d15%3A0xd2c44b0b3c52ce7!2sSiam%20Paragon!5e0!3m2!1sth!2sth!4v1695015301234!5m2!1sth!2sth"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </section>
+
+      <!-- เมนู -->
+      <section id="menu-tab" class="info tabpanel" role="tabpanel" aria-label="เมนู">
+        <div class="menu-dark">
+          <h3>เมนูเครื่องดื่ม</h3>
+          <ul class="drink-list">
+            <li class="drink-item" data-name="อเมริกาโน่" data-price="55">
+              <span class="drink-name">อเมริกาโน่</span><span class="price">฿55</span>
+            </li>
+            <li class="drink-item" data-name="ลาเต้เย็น" data-price="65">
+              <span class="drink-name">ลาเต้เย็น</span><span class="price">฿65</span>
+            </li>
+            <li class="drink-item" data-name="ชาเขียว" data-price="60">
+              <span class="drink-name">ชาเขียว</span><span class="price">฿60</span>
+            </li>
+            <li class="drink-item" data-name="ครอฟเฟิล" data-price="79">
+              <span class="drink-name">ครอฟเฟิล</span><span class="price">฿79</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3D -->
+      <section id="3d-tab" class="info tabpanel" role="tabpanel" aria-label="โมเดล 3D">
+        <p>โมเดล 3D จะมาเร็ว ๆ นี้!</p>
+      </section>
+
+      <!-- รีวิว -->
+      <section id="review-tab" class="tabpanel" role="tabpanel" aria-label="รีวิว" style="width:100%">
+        <div class="reviews-wrap">
+          <!-- สรุปเรตติ้ง -->
+          <aside class="rating-summary">
+            <div class="rating-head">
+              <div class="rating-big" id="avgScore">0.0</div>
+              <div>
+                <div id="totalReviews" class="meta">0 รีวิว</div>
+                <div id="avgStars" aria-hidden="true" style="font-size:18px;margin-top:2px"></div>
+                <div class="hint">จาก 5 ดาว</div>
+              </div>
+            </div>
+            <div id="bars" style="margin-top:10px">
+              <!-- ใส่แถบสรุป 5→1 -->
+            </div>
+
+            <div class="chips">
+              <div class="chip"><i>👯</i><span><span class="pct" id="fitFriends">0%</span> เหมาะกับ: เพื่อนฝูง</span>
+              </div>
+              <div class="chip"><i>💘</i><span><span class="pct" id="fitCouple">0%</span> เหมาะกับ: คู่รัก</span></div>
+              <div class="chip"><i>👨‍👩‍👧</i><span><span class="pct" id="fitFamily">0%</span> เหมาะกับ:
+                  ครอบครัว/เด็ก</span></div>
+            </div>
+
+            <div class="give-rating">
+              <h4 style="margin:8px 0 6px">ให้คะแนนร้านนี้</h4>
+              <div class="star-input" id="starInput" aria-label="ให้คะแนน 1 ถึง 5 ดาว"></div>
+              <form id="reviewForm" class="review-form">
+                <textarea id="reviewText" placeholder="เขียนรีวิวของคุณ..."></textarea>
+                <div class="row">
+                  <button type="submit" class="btn">ส่งรีวิว</button>
+                  <button type="button" class="btn secondary" id="loginBtn">เข้าสู่ระบบก่อนรีวิว</button>
+                </div>
+                <div class="hint">ต้องเข้าสู่ระบบก่อนส่งรีวิว</div>
+              </form>
+            </div>
+          </aside>
+
+          <!-- รายการรีวิว -->
+          <div class="reviews">
+            <div id="reviewsList"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modal ล็อกอิน -->
+  <div class="modal" id="loginModal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="x" id="closeLogin" aria-label="ปิด">×</button>
+      <h3 id="loginTitle">เข้าสู่ระบบ</h3>
+      <input class="input" id="loginIdentity" placeholder="เบอร์โทร/อีเมล" />
+      <button class="btn" id="doLogin" style="width:100%;margin-top:10px">ถัดไป</button>
+      <div class="or">หรือ</div>
+      <div class="oauth">
+        <button id="loginFB">เข้าสู่ระบบด้วย Facebook</button>
+        <button id="loginLINE">เข้าสู่ระบบด้วย LINE</button>
+        <button id="loginGG">เข้าสู่ระบบด้วย Google</button>
+      </div>
+      <div class="hint">* โหมดเดโม: ระบบจะบันทึกชื่อผู้ใช้ไว้ในเครื่องของคุณ</div>
+    </div>
+  </div>
+
+  <script>
+    /** ---------- Tabs ---------- **/
+    const tabButtons = document.querySelectorAll('.tab');
+    const tabs = document.querySelectorAll('.tabpanel');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active')); btn.classList.add('active');
+        const targetId = btn.dataset.target;
+        tabs.forEach(p => p.classList.toggle('active', p.id === targetId));
+        if (targetId === 'jpg-tab') document.getElementById('gallery')?.focus();
+      });
+    });
+
+    /** Close main dialog (demo) **/
+    document.getElementById('closeBtn').addEventListener('click', () => { document.getElementById('dialog').style.display = 'none'; });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.getElementById('dialog').style.display = 'none'; });
+
+    /** ---------- Gallery ---------- **/
+    let currentIndex = 0;
+    const slidesEl = document.getElementById('slides');
+    const totalSlides = slidesEl.children.length;
+    function goTo(idx) { currentIndex = (idx + totalSlides) % totalSlides; slidesEl.style.transform = `translateX(${-currentIndex * 100}%)`; }
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(currentIndex - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(currentIndex + 1));
+    document.getElementById('gallery').addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') goTo(currentIndex - 1); else if (e.key === 'ArrowRight') goTo(currentIndex + 1); });
+    goTo(0);
+
+    /** Menu click **/
+    document.querySelectorAll('.drink-item').forEach(li => {
+      li.addEventListener('click', () => { alert(`${li.dataset.name} ราคา ฿${li.dataset.price}`); });
+    });
+
+    /** ---------- Reviews (demo data + logic) ---------- **/
+    const demoReviews = [
+      {
+        user: "chubbypenguinvy 🧋", elite: true, stars: 4, date: "10 พ.ย. 2023",
+        text: "คาเฟ่เล็ก ๆ โฮมมี ฟีลชิล ใกล้ชุมชน มีทั้งโซน outdoor และ indoor กาแฟดี ขนมอร่อย 🍰",
+        images: ["https://picsum.photos/seed/a/240/160", "https://picsum.photos/seed/b/240/160", "https://picsum.photos/seed/c/240/160", "https://picsum.photos/seed/d/240/160"],
+        likes: 4, comments: 0, views: 475, fit: "friends"
+      },
+      {
+        user: "Yee_FullandFun", elite: true, stars: 4, date: "30 ส.ค. 2022",
+        text: "ร้านสะอาด โปร่งโล่ง นั่งทำงานได้ยาว ๆ มีปลั๊กพร้อม อินเตอร์เน็ตเร็วดีครับ",
+        images: ["https://picsum.photos/seed/e/240/160", "https://picsum.photos/seed/f/240/160", "https://picsum.photos/seed/g/240/160", "https://picsum.photos/seed/h/240/160"],
+        likes: 2, comments: 1, views: 964, fit: "couple"
+      },
+      { user: "Praewpailin TsuYu", elite: false, stars: 2, date: "12 ก.พ. 2024", text: "ช่วงคนเยอะเสียงดังไปหน่อย แต่พนักงานบริการดี", images: [], likes: 1, comments: 0, views: 102, fit: "family" }
+    ];
+    const state = {
+      reviews: JSON.parse(localStorage.getItem("reviews_igear") || "null") || demoReviews,
+      me: JSON.parse(localStorage.getItem("me_demo") || "null")
+    };
+
+    const barsEl = document.getElementById('bars');
+    const avgScoreEl = document.getElementById('avgScore');
+    const avgStarsEl = document.getElementById('avgStars');
+    const totalReviewsEl = document.getElementById('totalReviews');
+    const fitFriendsEl = document.getElementById('fitFriends');
+    const fitCoupleEl = document.getElementById('fitCouple');
+    const fitFamilyEl = document.getElementById('fitFamily');
+    const listEl = document.getElementById('reviewsList');
+
+    function starString(n, size = 16) {
+      return '★'.repeat(n) + '☆'.repeat(5 - n);
+    }
+
+    function renderSummary() {
+      const total = state.reviews.length || 0;
+      const sum = state.reviews.reduce((a, b) => a + b.stars, 0);
+      const avg = total ? (sum / total) : 0;
+      avgScoreEl.textContent = avg.toFixed(1);
+      avgStarsEl.textContent = starString(Math.round(avg));
+      totalReviewsEl.textContent = `${total} รีวิว`;
+
+      // breakdown 5→1
+      barsEl.innerHTML = "";
+      for (let s = 5; s >= 1; s--) {
+        const cnt = state.reviews.filter(r => r.stars === s).length;
+        const pct = total ? Math.round((cnt / total) * 100) : 0;
+        const row = document.createElement('div'); row.className = 'star-row';
+        row.innerHTML = `<span style="width:28px;text-align:right">${s}</span><span style="color:#f59e0b">★</span>
+          <div class="bar"><span style="width:${pct}%"></span></div>
+          <span style="width:34px;text-align:right;color:#475569">${pct}%</span>`;
+        barsEl.appendChild(row);
+      }
+
+      // fit tags (เดโม่จาก field r.fit)
+      const friends = Math.round(100 * state.reviews.filter(r => r.fit === 'friends').length / Math.max(1, total));
+      const couple = Math.round(100 * state.reviews.filter(r => r.fit === 'couple').length / Math.max(1, total));
+      const family = Math.round(100 * state.reviews.filter(r => r.fit === 'family').length / Math.max(1, total));
+      fitFriendsEl.textContent = friends + "%";
+      fitCoupleEl.textContent = couple + "%";
+      fitFamilyEl.textContent = family + "%";
+    }
+
+    function renderList() {
+      listEl.innerHTML = "";
+      state.reviews.forEach(r => {
+        const card = document.createElement('div'); card.className = 'rv-card';
+        const elite = r.elite ? `<span class="badge">Elite</span>` : "";
+        const grid = r.images?.length ? `
+          <div class="mini-grid">
+            ${r.images.slice(0, 4).map(src => `<img src="${src}" alt="รีวิวภาพ">`).join("")}
+          </div>` : "";
+        card.innerHTML = `
+          <div class="rv-head"><strong>${r.user}</strong> ${elite}</div>
+          <div class="meta">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)} · ${r.date} · ดูแล้ว ${r.views ?? Math.floor(200 + Math.random() * 800)}</div>
+          <div class="rv-body">${r.text}</div>
+          ${grid}
+          <div class="rv-actions">
+            <span class="thumbs">👍 <span>${r.likes || 0}</span></span>
+            <button>💬 คอมเมนต์</button>
+            <button>🔗 แชร์</button>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    renderSummary(); renderList();
+
+    /** ให้คะแนนร้านนี้ (เลือกดาว) **/
+    const starInputEl = document.getElementById('starInput');
+    let draftStars = 0;
+    for (let i = 1; i <= 5; i++) {
+      const b = document.createElement('button');
+      b.type = "button";
+      b.dataset.value = i;
+      b.className = "off";
+      b.textContent = "★";
+      b.addEventListener('mouseenter', () => paint(i));
+      b.addEventListener('mouseleave', () => paint(draftStars));
+      b.addEventListener('click', () => { draftStars = i; paint(draftStars); });
+      starInputEl.appendChild(b);
+    }
+    function paint(n) { [...starInputEl.children].forEach((el, idx) => { el.className = (idx < n) ? 'on' : 'off'; }) }
+
+    /** ฟอร์มรีวิว (ต้องล็อกอิน) **/
+    const reviewForm = document.getElementById('reviewForm');
+    const reviewText = document.getElementById('reviewText');
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!state.me) { openLogin(); return; }
+      if (!draftStars) { alert('กรุณาให้คะแนนเป็นจำนวนดาว'); return; }
+      const txt = reviewText.value.trim();
+      if (!txt) { alert('เขียนความเห็นสั้น ๆ หน่อยน้า'); return; }
+      const now = new Date();
+      const review = {
+        user: state.me.name, elite: false, stars: draftStars,
+        date: now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' }),
+        text: txt, images: [], likes: 0, comments: 0, views: 1 + Math.floor(Math.random() * 50), fit: "friends"
+      };
+      state.reviews.unshift(review);
+      localStorage.setItem('reviews_igear', JSON.stringify(state.reviews));
+      reviewText.value = ""; draftStars = 0; paint(0);
+      renderSummary(); renderList();
+      alert('ส่งรีวิวเรียบร้อย ขอบคุณค่ะ!');
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', openLogin);
+
+    /** ---------- Modal Login (จำลอง) ---------- **/
+    const loginModal = document.getElementById('loginModal');
+    function openLogin() { loginModal.classList.add('open'); loginModal.setAttribute('aria-hidden', 'false'); }
+    function closeLogin() { loginModal.classList.remove('open'); loginModal.setAttribute('aria-hidden', 'true'); }
+    document.getElementById('closeLogin').addEventListener('click', closeLogin);
+
+    function finishLogin(name) {
+      state.me = { name };
+      localStorage.setItem('me_demo', JSON.stringify(state.me));
+      closeLogin();
+      alert(`สวัสดี ${name} เข้าสู่ระบบแล้ว สามารถรีวิวได้เลย`);
+    }
+    document.getElementById('doLogin').addEventListener('click', () => {
+      const id = (document.getElementById('loginIdentity').value || "").trim();
+      if (!id) return alert('กรอกเบอร์โทรหรืออีเมลก่อนนะ');
+      finishLogin(id);
+    });
+    document.getElementById('loginFB').addEventListener('click', () => finishLogin('ผู้ใช้ Facebook'));
+    document.getElementById('loginLINE').addEventListener('click', () => finishLogin('ผู้ใช้ LINE'));
+    document.getElementById('loginGG').addEventListener('click', () => finishLogin('ผู้ใช้ Google'));
+  </script>
+</body>
+
+</html>
